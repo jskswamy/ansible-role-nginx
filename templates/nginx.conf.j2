@@ -30,7 +30,18 @@ http {
     keepalive_timeout  {{ nginx_keepalive_timeout }};
     keepalive_requests {{ nginx_keepalive_requests }};
 
-    #gzip  on;
+{% if nginx_enable_gzip %}
+    gzip on;
+    gzip_http_version 1.1;
+    gzip_comp_level 9;
+    gzip_static on;
+    gzip_vary  on;
+    gzip_proxied any;
+    gzip_min_length 1400;
+    gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript text/x-js;
+    gzip_buffers 16 8k;
+    gzip_disable "MSIE [1-6]\.(?!.*SV1)";
+{% endif %}
 
 {% if nginx_proxy_cache_path %}
     proxy_cache_path {{ nginx_proxy_cache_path }};
